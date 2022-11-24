@@ -1,1 +1,0 @@
-def admin_controls():

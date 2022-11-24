@@ -1,3 +1,6 @@
-Kizuyo;h0pes;Ray;Mecha;10000000
-Crezt;yosh4;Bryan;Steph;10000001
-Dekaffe;TSUK4RE;Yakou;Ken;10000002
+Kizuyo;h0pes;Ray;Mecha;0
+Crezt;yosh4;Bryan;Steph;0
+Dekaffe;TSUK4RE;Yakou;Ken;0
+Yojiro;nouda;Kenshi;Seasweek;1
+Eggygail;k4misato;Agnes;Tamago;1
+Admin;adminpass;Noda;Taka;1
