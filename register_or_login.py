@@ -8,9 +8,9 @@ def regis_or_log():
     initial_input = input("\nregister[0] or login[1]: ")
     try:
         if initial_input == "0":
-            return textfile_reliant_register_function()
+            return admin_vs_customer_register()
         elif initial_input == "1":
-            return textfile_reliant_login_function()
+            return admin_vs_customer_login()
         else:
             print("Error. Please try again.")
             return regis_or_log()
@@ -18,41 +18,93 @@ def regis_or_log():
         return regis_or_log()
 
 
-def textfile_reliant_login_function():
-    username = input("Username: ")
+def admin_vs_customer_login():
+    avc_driver = input("To enter the admin account, enter the password. Otherwise, press any key: ")
+    if avc_driver == "thefoxarrives":
+        return admin_login_function()
+    else:
+        return customer_login_function()
+
+
+def admin_vs_customer_register():
+    avcr_driver = input("To create an admin account, enter the administrator password. "
+                        "\nOtherwise, press any key: ")
+    if avcr_driver == "thefoxarrives":
+        return admin_register_function()
+    else:
+        return customer_register_function()
+
+
+def admin_login_function():
+    username = input("\nIf the username is entered incorrectly,"
+                     "\nthe application will stop. Username: ")
     password = input("Password: ")
-    for line in open("login_information.txt", "r").readlines():
+    for line in open("admin_information.txt", "r").readlines():
         login_details = line.split(";")
         if username == login_details[0]:
             if password == login_details[1]:
                 print("\nLogin success.")
                 print("Welcome,", login_details[2], login_details[3])
-                if int(login_details[4]) == 1:
-                    print("This is your Bank Administration Account.")
-                elif int(login_details[4]) == 0:
-                    print("Thank you for your patronage.")
-                else:
-                    print("Unable to tell if admin or user.")
-                return str(login_details[4])
+                print("This is your Bank Administration Account.")
+                login_details[4].rstrip("\n")
+                return str(login_details[0])
             else:
                 print("Incorrect Password or Username.")
                 user_failed = input("Try again or register? [0] to try once more, and [1] to register: ")
                 if user_failed == "0":
-                    textfile_reliant_login_function()
+                    admin_vs_customer_login()
                 elif user_failed == "1":
-                    textfile_reliant_register_function()
+                    admin_vs_customer_register()
                 else:
                     print("Error. Invalid input.")
                     regis_or_log()
 
-def textfile_reliant_register_function():
+
+def customer_login_function():
+    username = input("\nIf the username is entered incorrectly,"
+                     "\nthe application will stop. Username: ")
+    password = input("Password: ")
+    for line in open("customer_login_information.txt", "r").readlines():
+        login_details = line.split(";")
+        if username == login_details[0]:
+            if password == login_details[1]:
+                print("\nLogin success.")
+                print("Welcome,", login_details[2], login_details[3])
+                print("Thank you for your patronage.")
+                return str(login_details[0])
+            else:
+                print("Incorrect Password.")
+                user_failed = input("Try again or register? [0] to try once more, and [1] to register: ")
+                if user_failed == "0":
+                    admin_vs_customer_login()
+                elif user_failed == "1":
+                    admin_vs_customer_register()
+                else:
+                    print("Error. Invalid input.")
+                    regis_or_log()
+
+
+def admin_register_function():
     # Take the user input for their data.
-    admin_pass = str(input("To launch an admin account, enter the admin passcode: "))
     username = input("Enter the username you would like to use: ")
     password = input("Enter the password you would like to use: ")
     first_name = input("Enter your first name: ")
     last_name = input("Enter your last name: ")
-    login_file = open("login_information.txt", "a")
+    for lines_in_admin in open('admin_information.txt', "r").readlines():
+        reading = lines_in_admin.split(";")
+        if username != reading[0]:
+            continue
+        if username == reading[0]:
+            print("Username is taken. Please try again.")
+            return customer_register_function()
+    for lines_in_cust in open('customer_login_information.txt', "r").readlines():
+        reading = lines_in_cust.split(";")
+        if username != reading[0]:
+            continue
+        if username == reading[0]:
+            print("Username is taken. Please try again.")
+            return customer_register_function()
+    login_file = open('customer_login_information.txt', 'a')
     login_file.write("\n")
     login_file.write(username)
     login_file.write(";")
@@ -62,10 +114,49 @@ def textfile_reliant_register_function():
     login_file.write(";")
     login_file.write(last_name)
     login_file.write(";")
-    if admin_pass == "eggs":
-        login_file.write("1")
-    else:
-        login_file.write("0")
+    login_file.write("1")
     login_file.close()
-    print("User account creation success.")
-    textfile_reliant_login_function()
+    print("User account creation success. Be sure to restart the application.")
+    quit()
+
+
+def customer_register_function():
+    # Take the user input for their data.
+    username = input("Enter the username you would like to use: ")
+    password = input("Enter the password you would like to use: ")
+    first_name = input("Enter your first name: ")
+    last_name = input("Enter your last name: ")
+    for lines_in_cust in open('customer_login_information.txt', "r").readlines():
+        reading = lines_in_cust.split(";")
+        if username != reading[0]:
+            continue
+        if username == reading[0]:
+            print("Username is taken. Please try again.")
+            return customer_register_function()
+    for lines_in_admin in open('admin_information.txt', "r").readlines():
+        reading = lines_in_admin.split(";")
+        if username != reading[0]:
+            continue
+        if username == reading[0]:
+            print("Username is taken. Please try again.")
+            return customer_register_function()
+    login_file = open('customer_login_information.txt', 'a')
+    login_file.write("\n")
+    login_file.write(username)
+    login_file.write(";")
+    login_file.write(password)
+    login_file.write(";")
+    login_file.write(first_name)
+    login_file.write(";")
+    login_file.write(last_name)
+    login_file.write(";")
+    login_file.write("0")
+    login_file.close()
+    account_file = open("user_information.txt", "a")
+    account_file.write("\n")
+    account_file.write(username)
+    account_file.write(";")
+    account_file.write("50000")
+    account_file.close()
+    print("User account creation success. Please restart the application.")
+    quit()
