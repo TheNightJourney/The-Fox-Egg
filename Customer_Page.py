@@ -1,25 +1,9 @@
-from Account import Account
-from Bank import Bank
 import os
 import time
 
 
-user_file = open('user_information.txt', 'rt')
-general_data = user_file.readlines()
-
-
 def customer_menu_panel(user):
     os.system('cls')
-    global current_user
-    global user_balance
-
-    for line in general_data:
-        specific_data = line.split(";")
-        if user == specific_data[0]:
-            current_user = user
-            user_balance = specific_data[1]
-            int(user_balance)
-
     print("== Welcome to the Fox's Egg Bank! ===\n"
           "=== What would you like to do? ===\n"
           "\n"
@@ -29,56 +13,49 @@ def customer_menu_panel(user):
           "=== [3] Make a Payment ===\n"
           "=== [4] Quit Application ==="
           "\n")
+    return customer_decision(user)
+
+
+def customer_decision(user):
     try:
-        x = int(input("Enter a number: "))
-
-        if x == 4:
-            quit()
-
+        x = int(input("Enter your choice: "))
         if x == 0:
-            check_balance()
-            print("Another Transaction? [Y/N]"
-                "\n")
-            another = str(input("_"))
-            another.lower()
-            if another == "y":
-                customer_menu_panel(user)
+            find_balance_function(user)
+        if x == 1:
+            add_balance_function(user)
+        else:
+            print("Unspecified number. Please try again.")
+            customer_decision(user)
+    except ValueError:
+        print("Unknown variable inputted. Please try again.")
+        customer_decision(user)
+
+
+def find_balance_function(user):
+    for line in open('user_information.txt').readlines():
+        formatted_data = line.split(";")
+        if formatted_data[0] == user:
+            formatted_data[1].rstrip("\n")
+            print("Your credit count is", formatted_data[1])
+            x = input("Would you like to take another action? Please press [0] for Yes,\n"
+                      "and anything else to quit the application: ")
+            if x == "0":
+                os.system('cls')
+                return customer_menu_panel(user)
             else:
+                print("Thank you for using the Fox's Egg Bank!\n"
+                      "Hope to see you next time!")
                 quit()
 
-        if x == 1:
-            try:
-                deposit_value = int(input("Enter the amount you'd like to deposit: "))
-                if deposit_value > 0:
-                    user_balance += deposit_value
-                    str(user_balance)
-                    for line_3 in general_data:
-                        specific_data = line_3.split(";")
-                        if user == specific_data[0]:
-                            specific_data = specific_data.replace(specific_data[1], user_balance)
-                    print("Deposit success.")
-                    print("Another Transaction? [Y/N]"
-                          "\n")
-                    another = str(input("_"))
-                    another.str.lower()
-                    if another == "y":
-                        customer_menu_panel(user)
-                    else:
-                        quit()
-                else:
-                    print("Invalid amount inputted. Please try again.")
-                    customer_menu_panel(user)
-            except ValueError:
-                print("Invalid format inputted. Please use whole numbers.")
-    except ValueError:
-        print("Non-number entered. Try again.")
-        time.sleep(3)
-        customer_menu_panel(user)
 
-
-
-
-def check_balance():
-    print("Your current balance is", user_balance)
-
-
+def add_balance_function(user):
+    user_deposit = int(input("Enter the amount you would like to deposit: "))
+    general_data = open('user_information.txt', 'a').readlines()
+    for line_2 in general_data:
+        general_data = line_2.split(";")
+        if user_deposit > 0:
+            if general_data[0] == user:
+                general_data[0].rstrip("\n")
+                int(general_data[1])
+                general_data[1] += user_deposit
+                print(general_data[1])

@@ -71,6 +71,7 @@ def customer_login_function():
                 print("\nLogin success.")
                 print("Welcome,", login_details[2], login_details[3])
                 print("Thank you for your patronage.")
+                print(login_details[0])
                 return str(login_details[0])
             else:
                 print("Incorrect Password.")
