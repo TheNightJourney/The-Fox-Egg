@@ -3,3 +3,4 @@ Crezt;75600
 Dekaffe;12400
 ree;50000
 beans;50000
+pinkcember12;50000
