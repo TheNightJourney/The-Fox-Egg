@@ -1,6 +1,7 @@
 Kizuyo;100000
 Crezt;75600
-Dekaffe;12400
+Dekaffe;15000
 ree;50000
 beans;50000
 pinkcember12;50000
+chubbydiary;25200
